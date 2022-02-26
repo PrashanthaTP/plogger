@@ -8,9 +8,9 @@ logging.basicConfig(format="[%(levelname)s]  %(name)s | %(lineno)s : %(msg)s")
 curr_dir = os_path.dirname(os_path.abspath(__file__))
 settings_json = os_path.join(curr_dir, "log_settings.json")
 
-colors = namedtuple("colors", ["fg", "bg", "style"])
-loglevels = namedtuple("loglevels", ["debug", "info", "warning", "error"])
-levels = loglevels(logging.debug, logging.info,
+Colors = namedtuple("Colors", ["fg", "bg", "style"])
+LogLevels = namedtuple("LogLevels", ["debug", "info", "warning", "error"])
+levels = LogLevels(logging.debug, logging.info,
                    logging.info, logging.error)
 
 
@@ -20,30 +20,30 @@ class CustomFormatter(logging.Formatter):
         - https://www.ing.iac.es//~docs/external/bash/abs-guide/colorizing.html#:~:text=the%20simplest%2c%20and%20perhaps%20most,%5b0%22%20switches%20it%20off.
         - https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal
     """
-    black = colors(30, 40, "")
-    red = colors(31, 41, "")
-    green = colors(32, 42, "")
-    yellow = colors(33, 43, "")
-    blue = colors(34, 44, "")
-    magenta = colors(35, 45, "")
-    cyan = colors(36, 46, "")
-    white = colors(37, 47, "")
+    black = Colors(30, 40, "")
+    red = Colors(31, 41, "")
+    green = Colors(32, 42, "")
+    yellow = Colors(33, 43, "")
+    blue = Colors(34, 44, "")
+    magenta = Colors(35, 45, "")
+    cyan = Colors(36, 46, "")
+    white = Colors(37, 47, "")
     reset = "0"
     bold = "1"
     default_fmt = "[%(levelname)s]  %(name)s | %(lineno)s : %(msg)s"
-    default_fmts = loglevels(default_fmt, default_fmt,
+    default_fmts = LogLevels(default_fmt, default_fmt,
                              default_fmt, default_fmt)
-    default_level_styles = loglevels(
-        colors(green.fg, "", ""),
-        colors(cyan.fg, "", ""),
-        colors(red.fg, "", ""),
-        colors(red.fg, "", ""),
+    default_level_styles = LogLevels(
+        Colors(green.fg, "", ""),
+        Colors(cyan.fg, "", ""),
+        Colors(red.fg, "", ""),
+        Colors(red.fg, "", ""),
     )
 
     def escape(self, code):
         return f"\033[{code}m"
 
-    def full_color_code(self, fmt, color: colors):
+    def full_color_code(self, fmt, color: Colors):
         fg, bg, style = color.fg, color.bg, color.style
         if fg != "":
             fg = f"{fg};"
@@ -58,7 +58,7 @@ class CustomFormatter(logging.Formatter):
         last_chunk = self.escape(CustomFormatter.reset)
         return f"{first_chunk}{fmt}{last_chunk}"
 
-    def __init__(self, fmts: loglevels = None, level_styles: loglevels = None):
+    def __init__(self, fmts: LogLevels = None, level_styles: LogLevels = None):
         self.settings = level_styles or CustomFormatter.default_level_styles
         fmts = fmts or CustomFormatter.default_fmts
         self.formatters = {
