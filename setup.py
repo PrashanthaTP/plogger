@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup,find_packages
 
 def read_file(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -12,6 +12,6 @@ setup(
     license = "MIT",
     keywords = "msys2 gitbash bash pacman",
     url = "https://github.com/PrashanthaTP/plogger",
-    #packages=['an_example_pypi_project', 'tests'],
+    packages = find_packages(),
     long_description=read_file('README.md'),
 )
