@@ -1,7 +1,6 @@
 import logging
 import unittest
-from plogger.main import logger, set_verbosity, get_logger
-
+from plogger.main import get_global_logger, set_verbosity, get_logger
 
 """
 References:
@@ -15,7 +14,11 @@ References:
 """
 
 
+logger = get_global_logger()
 class TestMain(unittest.TestCase):
+
+    def setUp(self) -> None:
+        return super().setUp()
 
     def test_verbosity(self):
         set_verbosity(logging.DEBUG)
@@ -40,7 +43,7 @@ class TestMain(unittest.TestCase):
                              expected_len_captured_records)
 
     def test_get_logger(self):
-        mLogger = get_logger(__name__,level=logging.WARNING)
+        mLogger = get_logger(__name__, level=logging.WARNING)
         with self.assertLogs(logger=mLogger.name, level=mLogger.level) as captured:
             logs = ["Inside test_get_logger"]
             for log in logs:
@@ -52,6 +55,7 @@ class TestMain(unittest.TestCase):
             expected_len_captured_records = len(logs)
             self.assertEqual(len_captured_records,
                              expected_len_captured_records)
+
 
 if __name__ == "__main__":
     unittest.main()
